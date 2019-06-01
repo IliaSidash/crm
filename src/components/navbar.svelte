@@ -10,7 +10,6 @@
   let dropdownNode;
   let dropdown;
   let intervalId;
-
   let date = new Date();
 
   onMount(() => {

@@ -1,36 +1,88 @@
 <script>
+  import { link, navigate } from "svelte-routing";
+
+  import { required, email, minLength } from "../helpers/validators";
   import Layout from "../layouts/auth";
+  import Input from "../components/input";
+
+  let inputs = [
+    {
+      id: "email",
+      value: "",
+      label: "Email",
+      type: "text",
+      validity: null,
+      validators: [required(), email()]
+    },
+    {
+      id: "password",
+      value: "",
+      label: "Пароль",
+      type: "password",
+      validity: null,
+      validators: [required(), minLength(6)]
+    },
+    {
+      id: "name",
+      value: "",
+      label: "Имя",
+      type: "text",
+      validity: null,
+      validators: [required()]
+    }
+  ];
+
+  let agree = false;
+
+  function handleChange({ detail }) {
+    const { value, id } = detail;
+
+    const newInputs = [...inputs];
+    const currentIndex = newInputs.findIndex(input => input.id === id);
+
+    newInputs[currentIndex].value = value;
+
+    inputs = newInputs;
+  }
+
+  function handleSubmit() {
+    const formData = inputs.reduce((acc, cur) => {
+      acc[cur.id] = cur.value;
+      return acc;
+    }, {});
+
+    console.log(formData);
+    navigate("/");
+  }
+
+  $: formIsValid = inputs.every(input => input.validity) && agree;
 </script>
 
 <Layout>
-  <form class="card auth-card">
+  <form class="card auth-card" on:submit|preventDefault={handleSubmit}>
     <div class="card-content">
       <span class="card-title">Домашняя бухгалтерия</span>
-      <div class="input-field">
-        <input id="email" type="text" />
-        <label for="email">Email</label>
-        <small class="helper-text invalid">Email</small>
-      </div>
-      <div class="input-field">
-        <input id="password" type="password" class="validate" />
-        <label for="password">Пароль</label>
-        <small class="helper-text invalid">Password</small>
-      </div>
-      <div class="input-field">
-        <input id="name" type="text" class="validate" />
-        <label for="name">Имя</label>
-        <small class="helper-text invalid">Name</small>
-      </div>
+      {#each inputs as input (input.id)}
+        <div class="input-field">
+          <Input
+            bind:validity={input.validity}
+            {...input}
+            on:change={handleChange} />
+        </div>
+      {/each}
       <p>
         <label>
-          <input type="checkbox" />
+          <input type="checkbox" bind:checked={agree} />
           <span>С правилами согласен</span>
         </label>
       </p>
     </div>
     <div class="card-action">
       <div>
-        <button class="btn waves-effect waves-light auth-submit" type="submit">
+        <button
+          class="btn waves-effect waves-light auth-submit"
+          type="submit"
+          disabled={!formIsValid}>
           Зарегистрироваться
           <i class="material-icons right">send</i>
         </button>
@@ -38,7 +90,7 @@
 
       <p class="center">
         Уже есть аккаунт?
-        <a href="/">Войти!</a>
+        <a href="/login" use:link>Войти!</a>
       </p>
     </div>
   </form>
