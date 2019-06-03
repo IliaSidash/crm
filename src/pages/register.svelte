@@ -1,6 +1,7 @@
 <script>
   import { link, navigate } from "svelte-routing";
 
+  import { auth } from "../store";
   import { required, email, minLength } from "../helpers/validators";
   import Layout from "../layouts/auth";
   import Input from "../components/input";
@@ -45,14 +46,16 @@
     inputs = newInputs;
   }
 
-  function handleSubmit() {
+  async function handleSubmit() {
     const formData = inputs.reduce((acc, cur) => {
       acc[cur.id] = cur.value;
       return acc;
     }, {});
 
-    console.log(formData);
-    navigate("/");
+    try {
+      await auth.register(formData);
+      navigate("/");
+    } catch (e) {}
   }
 
   $: formIsValid = inputs.every(input => input.validity) && agree;
