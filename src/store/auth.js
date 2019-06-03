@@ -3,11 +3,7 @@ import { writable } from 'svelte/store';
 import firebase from 'firebase/app';
 
 import { setMessage, setError } from '../helpers/message';
-
-async function getUid() {
-  const user = await firebase.auth().currentUser;
-  return user.uid;
-}
+import { getUid } from '../helpers/currentUid';
 
 function createAuth() {
   const { subscribe, set, update } = writable({});
