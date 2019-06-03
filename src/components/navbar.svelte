@@ -1,9 +1,10 @@
 <script>
   import { onMount, onDestroy, createEventDispatcher } from "svelte";
-  import { links } from "svelte-routing";
+  import { link } from "svelte-routing";
   import M from "materialize-css";
 
   import datetimeFormat from "../helpers/datetime";
+  import { auth } from "../store";
 
   const dispatch = createEventDispatcher();
   const handleClick = () => dispatch("toggle");
@@ -46,16 +47,19 @@
           <i class="material-icons right">arrow_drop_down</i>
         </a>
 
-        <ul id="dropdown" class="dropdown-content" use:links>
+        <ul id="dropdown" class="dropdown-content">
           <li>
-            <a href="/profile" class="black-text">
+            <a href="/profile" class="black-text" use:link>
               <i class="material-icons">account_circle</i>
               Профиль
             </a>
           </li>
           <li class="divider" tabindex="-1" />
           <li>
-            <a href="/login" class="black-text">
+            <a
+              href="/login"
+              class="black-text"
+              on:click|preventDefault={auth.logout}>
               <i class="material-icons">assignment_return</i>
               Выйти
             </a>
