@@ -3,7 +3,7 @@
 
   import Layout from "../layouts/auth";
   import Input from "../components/input";
-
+  import { auth } from "../store";
   import { required, email, minLength } from "../helpers/validators";
 
   let inputs = [
@@ -38,14 +38,16 @@
     inputs = newInputs;
   }
 
-  function handleSubmit() {
+  async function handleSubmit() {
     const formData = inputs.reduce((acc, cur) => {
       acc[cur.id] = cur.value;
       return acc;
     }, {});
 
-    console.log(formData);
-    navigate("/");
+    try {
+      await auth.login(formData);
+      navigate("/");
+    } catch (e) {}
   }
 
   $: formIsValid = inputs.every(input => input.validity);
