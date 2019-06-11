@@ -19,3 +19,12 @@ export function minLength(length) {
     errorMessage: `Количество символов не должно быть меньше ${length}`
   });
 }
+
+export function limit(limit) {
+  return (value) => {
+    return {
+      isValid: parseInt(value) >= limit,
+      errorMessage: `Минимальное значение ${limit}`
+    };
+  };
+}
