@@ -6,6 +6,7 @@
   import datetimeFormat from "../helpers/datetime";
   import { auth } from "../store";
 
+  export let userName;
   const dispatch = createEventDispatcher();
   const handleClick = () => dispatch("toggle");
   let dropdownNode;
@@ -43,7 +44,7 @@
           href="/"
           bind:this={dropdownNode}
           data-target="dropdown">
-          USER NAME
+           {userName}
           <i class="material-icons right">arrow_drop_down</i>
         </a>
 
