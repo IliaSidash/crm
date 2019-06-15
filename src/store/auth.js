@@ -10,7 +10,7 @@ function createAuth() {
 
   return {
     subscribe,
-    login: async ({ email, password }) => {
+    async login({ email, password }) {
       try {
         const user = await firebase
           .auth()
@@ -21,7 +21,7 @@ function createAuth() {
         throw e;
       }
     },
-    register: async ({ email, password, name }) => {
+    async register({ email, password, name }) {
       try {
         await firebase.auth().createUserWithEmailAndPassword(email, password);
         const uid = await getUid();
@@ -39,7 +39,7 @@ function createAuth() {
         throw e;
       }
     },
-    logout: async () => {
+    async logout() {
       try {
         await firebase.auth().signOut();
         setMessage('Вы вышли из системы');
