@@ -1,5 +1,5 @@
 <script>
-  import { onMount, createEventDispatcher } from "svelte";
+  import { createEventDispatcher } from "svelte";
 
   export let id;
   export let value;
