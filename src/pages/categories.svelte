@@ -24,9 +24,11 @@
           <div class="col s12 m6">
             <CreateCategory />
           </div>
-          <div class="col s12 m6">
-            <EditCategory categories={$category} />
-          </div>
+          {#if $category.length}
+            <div class="col s12 m6">
+              <EditCategory categories={$category} />
+            </div>
+          {/if}
         </div>
       </section>
     </div>
