@@ -19,7 +19,7 @@
   <div class="app-main-layout">
     <Sidebar {sidebarIsOpen} />
     <Navbar
-      userName={$info.state.name}
+      userName={$info.name}
       on:toggle={() => (sidebarIsOpen = !sidebarIsOpen)} />
     <main class="app-content" class:full={!sidebarIsOpen}>
       <slot />

@@ -42,7 +42,7 @@
 
         <div class="row">
           <div class="col s12 m6 l4">
-            <BillCard bill={$info.state.bill} {rates} />
+            <BillCard bill={$info.bill} {rates} />
           </div>
 
           <div class="col s12 m6 l8">
