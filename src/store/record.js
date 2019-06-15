@@ -14,11 +14,32 @@ function createRecord() {
         const uid = await getUid();
         await firebase
           .database()
-          .ref(`/users/${uid}/recors`)
+          .ref(`/users/${uid}/records`)
           .push(record);
       } catch (e) {
         const { code } = e;
-        setError(coded);
+        setError(code);
+        throw e;
+      }
+    },
+    async fetchRecords() {
+      try {
+        const uid = await getUid();
+        const snapshot = await firebase
+          .database()
+          .ref(`/users/${uid}/records`)
+          .once('value');
+        const records = snapshot.val();
+        if (records) {
+          const normalizedRecords = Object.keys(records).map((key) => ({
+            id: key,
+            ...records[key]
+          }));
+          set(normalizedRecords);
+        }
+      } catch (e) {
+        const { code } = e;
+        setError(code);
         throw e;
       }
     }

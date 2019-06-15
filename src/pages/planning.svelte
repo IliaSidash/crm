@@ -1,5 +1,43 @@
 <script>
+  import { onMount } from "svelte";
+  import { link } from "svelte-routing";
+
   import Layout from "../layouts/main";
+  import Loader from "../components/loader";
+
+  import { category, info, record } from "../store";
+  import { format } from "../helpers/currencyFormatter";
+
+  let loading = true;
+  let categories = [];
+
+  onMount(async () => {
+    await record.fetchRecords();
+    await category.fetch();
+
+    loading = false;
+
+    categories = $category.map(cat => {
+      const spending = $record
+        .filter(r => r.categoryId === cat.id)
+        .filter(r => r.type === "outcome")
+        .reduce((total, cur) => {
+          return (total += +cur.amount);
+        }, 0);
+
+      const percent = (spending * 100) / cat.limit;
+      const progressPercent = percent > 100 ? 100 : percent;
+      const progressColor =
+        percent < 60 ? "green" : percent < 100 ? "yellow" : "red";
+
+      return {
+        ...cat,
+        spending,
+        percent: progressPercent,
+        color: progressColor
+      };
+    });
+  });
 </script>
 
 <Layout>
@@ -7,20 +45,31 @@
     <div>
       <div class="page-title">
         <h3>Планирование</h3>
-        <h4>12 212</h4>
+        <h4>{format($info.bill, 'RUB')}</h4>
       </div>
 
-      <section>
-        <div>
-          <p>
-            <strong>Девушка:</strong>
-            12 122 из 14 0000
-          </p>
-          <div class="progress">
-            <div class="determinate green" style="width:40%" />
-          </div>
-        </div>
-      </section>
+      {#if loading}
+        <Loader />
+      {:else if !categories.length}
+        <p class="center">
+          Категорий пока нет.
+          <a href="/categories" use:link>Добавьте новую категорию</a>
+        </p>
+      {:else}
+        <section>
+          {#each categories as { id, name, limit, spending, percent, color } (id)}
+            <div>
+              <p>
+                <strong>{name}:</strong>
+                 {format(spending, 'RUB')} из {format(limit, 'RUB')}
+              </p>
+              <div class="progress">
+                <div class="determinate {color}" style="width:{percent}%" />
+              </div>
+            </div>
+          {/each}
+        </section>
+      {/if}
     </div>
   </div>
 </Layout>
