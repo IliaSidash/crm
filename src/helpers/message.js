@@ -1,6 +1,7 @@
 import M from 'materialize-css';
 
 const messages = {
+  PERMISSION_DENIED: 'Необходимо войти в систему',
   'auth/user-not-found': 'Пользователь с таким email не существует',
   'auth/wrong-password': 'Невереный пароль',
   'auth/email-already-in-use': 'Email уже занят'
