@@ -27,6 +27,8 @@ function createInfo() {
           loaded: true
         });
       } catch (e) {
+        const { code } = e;
+        setError(code);
         throw e;
       }
     },
