@@ -19,7 +19,7 @@
 
 <Router>
   <Route path="/categories" component={Categories} />
-  <Route path="/detail-record" component={DetailRecord} />
+  <Route path="/detail-record/:id" component={DetailRecord} />
   <Route path="/history" component={History} />
   <Route path="/login" component={Login} />
   <Route path="/planning" component={Planning} />
