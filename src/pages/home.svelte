@@ -17,8 +17,10 @@
   }
 
   async function fetchCurrency() {
-    currency = null;
-    currency = await info.fetchCurrency();
+    try {
+      currency = null;
+      currency = await info.fetchCurrency();
+    } catch (e) {}
   }
 
   onMount(() => {

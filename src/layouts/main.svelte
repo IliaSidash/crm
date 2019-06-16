@@ -1,5 +1,7 @@
 <script>
   import { onMount } from "svelte";
+  import firebase from "firebase/app";
+  import { navigate } from "svelte-routing";
 
   import Sidebar from "../components/sidebar";
   import Navbar from "../components/navbar";
@@ -8,9 +10,17 @@
 
   let sidebarIsOpen = true;
 
-  onMount(() => {
+  onMount(async () => {
+    const currentUser = firebase.auth().currentUser;
+
     if (!$info.loaded) {
-      info.fetch();
+      try {
+        await info.fetch();
+      } catch (e) {
+        if (e.code === "PERMISSION_DENIED" && !currentUser) {
+          navigate("/login");
+        }
+      }
     }
   });
 </script>

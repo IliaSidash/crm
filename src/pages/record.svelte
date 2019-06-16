@@ -67,11 +67,13 @@
     } catch (e) {}
   }
 
-  onMount(() => {
-    if (!$category.length) {
-      category.fetch();
-    }
-    loading = false;
+  onMount(async () => {
+    try {
+      if (!$category.length) {
+        await category.fetch();
+      }
+      loading = false;
+    } catch (e) {}
   });
 </script>
 

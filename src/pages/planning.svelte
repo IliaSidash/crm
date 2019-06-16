@@ -13,35 +13,37 @@
   let categories = [];
 
   onMount(async () => {
-    await record.fetchRecords();
-    await category.fetch();
+    try {
+      await category.fetch();
+      await record.fetchRecords();
 
-    loading = false;
+      loading = false;
 
-    categories = $category.map(cat => {
-      const spending = $record
-        .filter(r => r.categoryId === cat.id)
-        .filter(r => r.type === "outcome")
-        .reduce((total, cur) => {
-          return (total += +cur.amount);
-        }, 0);
+      categories = $category.map(cat => {
+        const spending = $record
+          .filter(r => r.categoryId === cat.id)
+          .filter(r => r.type === "outcome")
+          .reduce((total, cur) => {
+            return (total += +cur.amount);
+          }, 0);
 
-      const percent = (spending * 100) / cat.limit;
-      const progressPercent = percent > 100 ? 100 : percent;
-      const progressColor =
-        percent < 60 ? "green" : percent < 100 ? "yellow" : "red";
-      const tooltipValue = +cat.limit - spending;
-      const tooltipText = `${
-        tooltipValue >= 0 ? "Осталось" : "Превышение на"
-      } ${format(Math.abs(tooltipValue), "RUB")}`;
-      return {
-        ...cat,
-        spending,
-        percent: progressPercent,
-        color: progressColor,
-        tooltipText
-      };
-    });
+        const percent = (spending * 100) / cat.limit;
+        const progressPercent = percent > 100 ? 100 : percent;
+        const progressColor =
+          percent < 60 ? "green" : percent < 100 ? "yellow" : "red";
+        const tooltipValue = +cat.limit - spending;
+        const tooltipText = `${
+          tooltipValue >= 0 ? "Осталось" : "Превышение на"
+        } ${format(Math.abs(tooltipValue), "RUB")}`;
+        return {
+          ...cat,
+          spending,
+          percent: progressPercent,
+          color: progressColor,
+          tooltipText
+        };
+      });
+    } catch (e) {}
   });
 </script>
 

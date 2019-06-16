@@ -8,8 +8,10 @@
 
   import { category } from "../store";
 
-  onMount(() => {
-    category.fetch();
+  onMount(async () => {
+    try {
+      await category.fetch();
+    } catch (e) {}
   });
 </script>
 
