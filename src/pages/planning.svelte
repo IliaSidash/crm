@@ -7,6 +7,7 @@
 
   import { category, info, record } from "../store";
   import { format } from "../helpers/currencyFormatter";
+  import { tooltip } from "../actions/tooltip";
 
   let loading = true;
   let categories = [];
@@ -29,12 +30,16 @@
       const progressPercent = percent > 100 ? 100 : percent;
       const progressColor =
         percent < 60 ? "green" : percent < 100 ? "yellow" : "red";
-
+      const tooltipValue = +cat.limit - spending;
+      const tooltipText = `${
+        tooltipValue >= 0 ? "Осталось" : "Превышение на"
+      } ${format(Math.abs(tooltipValue), "RUB")}`;
       return {
         ...cat,
         spending,
         percent: progressPercent,
-        color: progressColor
+        color: progressColor,
+        tooltipText
       };
     });
   });
@@ -57,13 +62,13 @@
         </p>
       {:else}
         <section>
-          {#each categories as { id, name, limit, spending, percent, color } (id)}
+          {#each categories as { id, name, limit, spending, percent, color, tooltipText } (id)}
             <div>
               <p>
                 <strong>{name}:</strong>
                  {format(spending, 'RUB')} из {format(limit, 'RUB')}
               </p>
-              <div class="progress">
+              <div class="progress" use:tooltip={{ html: tooltipText }}>
                 <div class="determinate {color}" style="width:{percent}%" />
               </div>
             </div>
