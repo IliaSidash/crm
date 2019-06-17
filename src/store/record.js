@@ -42,6 +42,23 @@ function createRecord() {
         setError(code);
         throw e;
       }
+    },
+    async fetchRecordById(id) {
+      try {
+        const uid = await getUid();
+        const snapshot = await firebase
+          .database()
+          .ref(`/users/${uid}/records`)
+          .child(id)
+          .once('value');
+        const record = snapshot.val() || {};
+
+        return { ...record, id };
+      } catch (e) {
+        const { code } = e;
+        setError(code);
+        throw e;
+      }
     }
   };
 }
