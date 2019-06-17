@@ -19,6 +19,7 @@
     "serve": "serve ./public"
   },
   "dependencies": {
+    "chart.js": "^2.8.0",
     "firebase": "^6.2.0",
     "materialize-css": "^1.0.0-rc.2",
     "svelte-routing": "^1.1.1"
