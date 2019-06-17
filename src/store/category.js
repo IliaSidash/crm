@@ -14,7 +14,7 @@ function createCategory() {
         .database()
         .ref(`/users/${uid}/categories`)
         .once('value');
-      const categories = snapshot.val();
+      const categories = snapshot.val() || {};
       const normalizedCategories = Object.keys(categories).map((key) => ({
         id: key,
         ...categories[key]
