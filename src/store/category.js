@@ -20,12 +20,32 @@ function createCategory() {
         ...categories[key]
       }));
       set(normalizedCategories);
-    } catch (e) {}
+    } catch (e) {
+      const { code } = e;
+      setError(code);
+      throw e;
+    }
   }
 
   return {
     subscribe,
     fetch,
+    async fetchById(id) {
+      try {
+        const uid = await getUid();
+        const snapshot = await firebase
+          .database()
+          .ref(`/users/${uid}/categories`)
+          .child(id)
+          .once('value');
+        const category = snapshot.val() || {};
+        return { ...category, id };
+      } catch (e) {
+        const { code } = e;
+        setError(code);
+        throw e;
+      }
+    },
     async create({ name, limit }) {
       try {
         const uid = await getUid();
