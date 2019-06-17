@@ -139,7 +139,7 @@
             <Input
               id="description"
               value={description}
-              label="Описагие"
+              label="Описание"
               type="text"
               bind:validity={descriptionIsValid}
               validityText="Description"
