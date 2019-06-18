@@ -1,5 +1,5 @@
 <script>
-  import { createEventDispatcher } from "svelte";
+  import { createEventDispatcher, tick } from "svelte";
 
   export let id;
   export let value;
@@ -30,6 +30,10 @@
     touched = false;
     dispatch("change", { value, id });
   }
+
+  tick().then(() => {
+    M.updateTextFields();
+  });
 </script>
 
 <input
